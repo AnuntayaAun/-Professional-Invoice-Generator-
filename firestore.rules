@@ -34,16 +34,17 @@ service cloud.firestore {
 
     function isAdmin() {
       return isAuthenticated() &&
-        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        ((exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin') ||
           (request.auth.token.email == "aunnun0024@gmail.com" && request.auth.token.email_verified == true));
     }
 
     function isValidInvoice(data) {
-      return data.invoiceNumber is string && data.invoiceNumber.size() > 0 && data.invoiceNumber.size() < 50 &&
-             data.customerName is string && data.customerName.size() > 0 && data.customerName.size() < 100 &&
+      return data.invoiceNumber is string && 
+             data.customerName is string && 
              data.date is string &&
-             data.items is list && data.items.size() <= 50 &&
-             data.total is number && data.total >= 0 &&
+             data.items is list && 
+             data.total is number && 
              data.uid == request.auth.uid &&
              data.createdAt is string;
     }
@@ -57,7 +58,7 @@ service cloud.firestore {
       allow read: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
       
       // Users can create invoices for themselves
-      allow create: if isAuthenticated() && isValidInvoice(request.resource.data);
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
       
       // Invoices are generally immutable once issued, but admins can update/delete
       allow update, delete: if isAdmin();
