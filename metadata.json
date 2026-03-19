@@ -1,0 +1,5 @@
+{
+  "name": "ระบบออกใบแจ้งหนี้ออนไลน์ (Professional Invoice Generator)",
+  "description": "ระบบสร้างใบแจ้งหนี้และใบเสร็จรับเงินออนไลน์ พร้อมฟีเจอร์คำนวณภาษี แสดงตัวอย่าง และดาวน์โหลด PDF",
+  "requestFramePermissions": []
+}

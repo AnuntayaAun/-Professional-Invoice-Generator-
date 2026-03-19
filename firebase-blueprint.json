@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "invoice": {
+      "title": "Invoice",
+      "description": "A professional invoice document",
+      "type": "object",
+      "properties": {
+        "invoiceNumber": { "type": "string", "description": "Unique invoice identifier" },
+        "customerName": { "type": "string", "description": "Name of the customer" },
+        "customerAddress": { "type": "string", "description": "Address of the customer" },
+        "date": { "type": "string", "format": "date", "description": "Invoice date" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": { "type": "string" },
+              "quantity": { "type": "number" },
+              "pricePerUnit": { "type": "number" }
+            }
+          }
+        },
+        "subtotal": { "type": "number" },
+        "vat": { "type": "number" },
+        "total": { "type": "number" },
+        "uid": { "type": "string", "description": "User ID of the creator" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["invoiceNumber", "customerName", "date", "items", "total", "uid", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/invoices/{invoiceId}": {
+      "schema": "invoice",
+      "description": "Collection of all generated invoices"
+    }
+  }
+}
