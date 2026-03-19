@@ -7,6 +7,8 @@ export interface InvoiceItem {
 
 export interface Invoice {
   id: string;
+  companyName?: string;
+  companyAddress?: string;
   customerName: string;
   customerAddress: string;
   date: string;

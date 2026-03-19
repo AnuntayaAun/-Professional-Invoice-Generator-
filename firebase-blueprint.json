@@ -6,6 +6,8 @@
       "type": "object",
       "properties": {
         "invoiceNumber": { "type": "string", "description": "Unique invoice identifier" },
+        "companyName": { "type": "string", "description": "Name of the company" },
+        "companyAddress": { "type": "string", "description": "Address of the company" },
         "customerName": { "type": "string", "description": "Name of the customer" },
         "customerAddress": { "type": "string", "description": "Address of the customer" },
         "date": { "type": "string", "format": "date", "description": "Invoice date" },

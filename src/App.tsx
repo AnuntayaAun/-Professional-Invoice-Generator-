@@ -78,6 +78,8 @@ function InvoiceApp() {
   
   const [customerName, setCustomerName] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
+  const [companyName, setCompanyName] = useState('บริษัท ของคุณ จำกัด');
+  const [companyAddress, setCompanyAddress] = useState('123 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร 10110');
   const [invoiceNumber, setInvoiceNumber] = useState(`INV-${format(new Date(), 'yyyyMMdd')}-001`);
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [items, setItems] = useState<InvoiceItem[]>([
@@ -154,6 +156,8 @@ function InvoiceApp() {
       // Save to Firestore only if user is logged in and we're in 'create' mode
       if (user && activeTab === 'create' && !selectedInvoice) {
         const invoiceData = {
+          companyName,
+          companyAddress,
           customerName,
           customerAddress,
           date,
@@ -345,10 +349,47 @@ function InvoiceApp() {
                 <div className="bg-white rounded-[2.5rem] shadow-sm border border-zinc-200 p-6 sm:p-10 space-y-10">
                   <div className="flex items-center justify-between">
                     <div>
+                      <h2 className="text-2xl font-black tracking-tight">ข้อมูลบริษัทของคุณ</h2>
+                      <p className="text-sm text-zinc-400 font-medium mt-1">ระบุรายละเอียดบริษัทของคุณเพื่อแสดงในใบแจ้งหนี้</p>
+                    </div>
+                    <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 font-black text-xs">01</div>
+                  </div>
+
+                  <div className="space-y-8">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                        <FileText size={14} className="text-emerald-500" /> ชื่อบริษัท
+                      </label>
+                      <input 
+                        type="text" 
+                        value={companyName}
+                        onChange={(e) => setCompanyName(e.target.value)}
+                        className="w-full px-5 py-4 bg-zinc-50 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-bold text-zinc-900 placeholder:text-zinc-300"
+                        placeholder="ชื่อบริษัทของคุณ"
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                        <MapPin size={14} className="text-emerald-500" /> ที่อยู่บริษัท
+                      </label>
+                      <textarea 
+                        value={companyAddress}
+                        onChange={(e) => setCompanyAddress(e.target.value)}
+                        rows={3}
+                        className="w-full px-5 py-4 bg-zinc-50 border border-zinc-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all resize-none font-bold text-zinc-900 placeholder:text-zinc-300 leading-relaxed"
+                        placeholder="ที่อยู่บริษัทของคุณ"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-[2.5rem] shadow-sm border border-zinc-200 p-6 sm:p-10 space-y-10">
+                  <div className="flex items-center justify-between">
+                    <div>
                       <h2 className="text-2xl font-black tracking-tight">ข้อมูลใบแจ้งหนี้</h2>
                       <p className="text-sm text-zinc-400 font-medium mt-1">ระบุรายละเอียดพื้นฐานของบิล</p>
                     </div>
-                    <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 font-black text-xs">01</div>
+                    <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 font-black text-xs">02</div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -509,9 +550,9 @@ function InvoiceApp() {
                         <p className="text-[10px] font-black text-zinc-400 tracking-[0.4em] uppercase">{invoiceNumber}</p>
                       </div>
                       <div className="text-right">
-                        <h4 className="font-black text-xl text-zinc-900">บริษัท ของคุณ จำกัด</h4>
+                        <h4 className="font-black text-xl text-zinc-900">{companyName || 'ชื่อบริษัทของคุณ'}</h4>
                         <p className="text-[11px] text-zinc-400 font-medium max-w-[220px] leading-relaxed ml-auto mt-2">
-                          123 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร 10110
+                          {companyAddress || 'ที่อยู่บริษัทของคุณ'}
                         </p>
                       </div>
                     </div>
@@ -730,9 +771,9 @@ function InvoiceApp() {
                         <p className="text-[10px] font-black text-zinc-400 tracking-[0.4em] uppercase">{selectedInvoice.invoiceNumber}</p>
                       </div>
                       <div className="text-right">
-                        <h4 className="font-black text-xl text-zinc-900">บริษัท ของคุณ จำกัด</h4>
+                        <h4 className="font-black text-xl text-zinc-900">{selectedInvoice.companyName || 'บริษัท ของคุณ จำกัด'}</h4>
                         <p className="text-[11px] text-zinc-400 font-medium max-w-[220px] leading-relaxed ml-auto mt-2">
-                          123 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร 10110
+                          {selectedInvoice.companyAddress || '123 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร 10110'}
                         </p>
                       </div>
                     </div>
