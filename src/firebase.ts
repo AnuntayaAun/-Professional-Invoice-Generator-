@@ -85,9 +85,11 @@ export const saveInvoiceToFirestore = async (invoice: any) => {
 async function testConnection() {
   try {
     await getDocFromServer(doc(db, 'test', 'connection'));
+    console.log("Firebase connection successful.");
   } catch (error) {
+    console.error("Firebase connection test failed:", error);
     if(error instanceof Error && error.message.includes('the client is offline')) {
-      console.error("Please check your Firebase configuration. ");
+      console.error("Please check your Firebase configuration. Ensure Firestore is enabled in your project and the Project ID is correct.");
     }
   }
 }
